@@ -1,5 +1,4 @@
-﻿using Dapper.Contrib.Extensions;
-
+﻿
 namespace TinyAchievements.Entities
 {
     /// <summary>

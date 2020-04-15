@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TinyAchievements.Entities;
 using TinyAchievements.DataAccess;
-using System.Text;
 using System.ComponentModel.DataAnnotations;
 
 namespace TinyAchievements.Controllers

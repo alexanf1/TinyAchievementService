@@ -7,6 +7,8 @@ using TinyAchievements.DataAccess;
 using TinyAchievements.Commons.DataAccess;
 using Dapper.Contrib.Extensions;
 using Microsoft.OpenApi.Models;
+using System.IO;
+using System.Reflection;
 
 namespace TinyAchievements
 {
@@ -68,6 +70,10 @@ namespace TinyAchievements
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "TinyAchievements API", Version = "v1" });
+                options.IncludeXmlComments(
+                    Path.Combine(
+                        Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
+                        Assembly.GetEntryAssembly().GetName().Name + ".xml"));
             });
         }
 
