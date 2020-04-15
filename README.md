@@ -18,5 +18,8 @@ user that has the following privileges:
 2. Then run the following commands from the 'Db' directory <b>in order</b>
 
     mysql < tinyachievements-schema.sql
+    
     mysql < tinyachievements-data.sql
+    
+    
 
