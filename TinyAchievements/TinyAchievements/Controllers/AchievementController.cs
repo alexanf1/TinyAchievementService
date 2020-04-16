@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using TinyAchievements.Entities;
 using TinyAchievements.DataAccess;
-using System.Text;
 using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace TinyAchievements.Controllers
 {
@@ -34,7 +34,7 @@ namespace TinyAchievements.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(Achievement[]), 200/*Ok*/)]
         [ProducesResponseType(typeof(void), 404/*NotFound*/)]
-        public async Task<ActionResult<string>> Get()
+        public async Task<ActionResult> Get()
         {
             Achievement[] achievements = await _achievementRepository.GetAchievements();
             if (achievements == null)
@@ -53,7 +53,7 @@ namespace TinyAchievements.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(Achievement), 200/*Ok*/)]
         [ProducesResponseType(typeof(void), 404/*NotFound*/)]
-        public async Task<ActionResult<string>> Get([Required] int id)
+        public async Task<ActionResult> Get([Required] Guid id)
         {
             Achievement achievement = await _achievementRepository.GetAchievement(id);
             if (achievement == null)
@@ -63,6 +63,28 @@ namespace TinyAchievements.Controllers
                 });
 
             return Ok(achievement);
+        }
+
+        /// <summary>
+        /// Gets all the achievements for a specific player
+        /// </summary>
+        /// <param name="id">A guid that specificies a player</param>
+        /// <returns>A valid collection of PlayerAchievement; error otherwise</returns>
+        /// <response code="200">A collection of PlayerAchievement was found successfully.</response>
+        /// <response code="404">No collection of PlayerAchievement could be found. The returned error message provides further details</response>
+        [HttpGet(("[action]/{id}"))]
+        [ProducesResponseType(typeof(PlayerAchievement[]), 200/*Ok*/)]
+        [ProducesResponseType(typeof(void), 404/*NotFound*/)]
+        public async Task<ActionResult> Player([Required] Guid id)
+        {
+            PlayerAchievement[] playerAchievements = await _achievementRepository.GetPlayerAchievements(id);
+            if(playerAchievements == null)
+                return NotFound(new
+                {
+                    id = $"No {nameof(PlayerAchievement)}s were found with the specified {nameof(id)}."
+                });
+
+            return Ok(playerAchievements);
         }
     }
 }

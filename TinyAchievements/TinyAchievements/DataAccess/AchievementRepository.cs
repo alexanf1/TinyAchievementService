@@ -6,6 +6,7 @@ using Dapper;
 using System.Linq;
 using MySql.Data.MySqlClient;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace TinyAchievements.DataAccess
 {
@@ -50,7 +51,7 @@ namespace TinyAchievements.DataAccess
         }
 
         /// <inheritdoc />
-        public async Task<Achievement> GetAchievement(int id)
+        public async Task<Achievement> GetAchievement(Guid id)
         {
             try
             {
@@ -60,6 +61,36 @@ namespace TinyAchievements.DataAccess
                 }
             }
             catch(MySqlException e)
+            {
+                _logger.LogError(e.Message + "Check appsettings.json and make sure your ConnectionStrings to " +
+                    "MySql are correct. Your localhost, port, username and/or password may also be incorrect.");
+            }
+
+            return null;
+        }
+
+        /// <inheritdoc />
+        public async Task<PlayerAchievement[]> GetPlayerAchievements(Guid playerId)
+        {
+            try
+            {
+                using (var conn = _mySqlConnectionHelper.GetConnection())
+                {
+                    var playerAchievements = await conn.QueryAsync<PlayerAchievement>(
+                        @"
+                        SELECT t2.*, t1.Earned 
+                        FROM tinyachievements.playerachievement t1
+                        INNER JOIN
+                        tinyachievements.achievement t2
+                        ON
+                        t1.AchievementId = t2.Id
+                        WHERE PlayerId = ?playerId", 
+                        new { playerId });
+
+                    return playerAchievements as PlayerAchievement[] ?? playerAchievements.ToArray();
+                }
+            }
+            catch (MySqlException e)
             {
                 _logger.LogError(e.Message + "Check appsettings.json and make sure your ConnectionStrings to " +
                     "MySql are correct. Your localhost, port, username and/or password may also be incorrect.");

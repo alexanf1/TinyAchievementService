@@ -20,6 +20,14 @@ namespace TinyAchievements.DataAccess
         /// </summary>
         /// <param name="id"></param>
         /// <returns>A specific achievement with a matching identifier</returns>
-        Task<Achievement> GetAchievement(int id);
+        Task<Achievement> GetAchievement(Guid id);
+
+        /// <summary>
+        /// Gets all player achievement data based playerId
+        /// </summary>
+        /// <param name="playerId"></param>
+        /// <param name="achievementId"></param>
+        /// <returns></returns>
+        Task<PlayerAchievement[]> GetPlayerAchievements(Guid playerId);
     }
 }

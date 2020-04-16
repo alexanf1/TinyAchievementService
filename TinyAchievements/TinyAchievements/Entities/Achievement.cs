@@ -1,4 +1,5 @@
-﻿using Dapper.Contrib.Extensions;
+﻿
+using System;
 
 namespace TinyAchievements.Entities
 {
@@ -10,12 +11,17 @@ namespace TinyAchievements.Entities
         /// <summary>
         /// A unique identifier for this Achievement
         /// </summary>
-        public int Id { get; set; }
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// An api identifier for this achievement
+        /// </summary>
+        public string ApiName { get; set; }
 
         /// <summary>
         /// The name of the Achievement
         /// </summary>
-        public string Name { get; set; }
+        public string DisplayName { get; set; }
 
         /// <summary>
         /// The description of the Achievement
