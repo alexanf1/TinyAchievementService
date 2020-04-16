@@ -1,11 +1,24 @@
-DROP SCHEMA IF EXISTS tinyachievements;
-CREATE SCHEMA tinyachievements;
-USE tinyachievements;
+DROP SCHEMA IF EXISTS Tinyachievements;
+CREATE SCHEMA Tinyachievements;
 
-CREATE TABLE Achievement (
-  Id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  Name CHAR(64) NOT NULL,
+USE Tinyachievements;
+
+CREATE TABLE IF NOT EXISTS Tinyachievements.Achievement (
+  Id CHAR(36) NOT NULL UNIQUE PRIMARY KEY,
+  ApiName CHAR(64) NOT NULL,
+  DisplayName CHAR(64) NOT NULL,
   Description CHAR(128) NOT NULL,
-  MetaData JSON NOT NULL,
-  PRIMARY KEY  (Id)
+  MetaData JSON NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Tinyachievements.PlayerAchievement (
+  PlayerId CHAR(36) NOT NULL REFERENCES Tinyachievements.Player(Id),
+  AchievementId CHAR(36) NOT NULL REFERENCES Tinyachievements.Achievement(Id),
+  Earned BOOL NOT NULL,
+  PRIMARY KEY (PlayerId, AchievementId),
+  UNIQUE (PlayerId, AchievementId)
+);
+
+CREATE TABLE IF NOT EXISTS Tinyachievements.Player (
+  Id CHAR(36) NOT NULL UNIQUE PRIMARY KEY
 );
